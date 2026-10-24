@@ -1,0 +1,16 @@
+# Dependencies and framework build output
+node_modules/
+.next/
+out/
+
+# Local environment files
+.env*
+!.env.example
+
+# Logs and operating-system metadata
+*.log
+.DS_Store
+
+# TypeScript build metadata
+*.tsbuildinfo
+node_modules

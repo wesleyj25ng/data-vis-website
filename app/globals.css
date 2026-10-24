@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+:root { --ink: #071a2b; --blue: #27b6ff; --lime: #c7f464; --sand: #eef3f5; --mist: #dce9ef; --panel: #0b1f32; --signal: #ffb454; --alert: #ff6b5d; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--sand); color: var(--ink); font-family: Arial, Helvetica, sans-serif; }
+::selection { background: var(--lime); color: var(--ink); }
+.display { font-family: Arial, Helvetica, sans-serif; font-weight: 800; letter-spacing: -.065em; }
+.grid-paper { background-color: #eef3f5; background-image: linear-gradient(rgba(19,124,190,.10) 1px, transparent 1px), linear-gradient(90deg, rgba(19,124,190,.10) 1px, transparent 1px), radial-gradient(circle at 78% 16%, rgba(39,182,255,.22), transparent 24rem); background-size: 26px 26px, 26px 26px, auto; }
+.section-rule { border-top: 1px solid rgba(7,26,43,.18); }
+.eyebrow { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.chart-card { position: relative; overflow: hidden; border: 1px solid rgba(7,26,43,.24); background: rgba(255,255,255,.7); box-shadow: 5px 5px 0 rgba(7,26,43,.10); }
+.chart-card::before { position: absolute; top: 0; left: 0; width: 52px; height: 3px; background: var(--blue); content: ""; }
+.tech-panel { border: 1px solid rgba(199,244,100,.28); background: linear-gradient(135deg, #071a2b, #0d2e48); color: white; box-shadow: 6px 6px 0 rgba(7,26,43,.16); }
+.terminal-label { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: .69rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.scanline { background-image: repeating-linear-gradient(180deg, transparent 0, transparent 5px, rgba(199,244,100,.035) 6px); }
+.recharts-cartesian-grid-horizontal line { stroke: rgba(7,26,43,.1); }
+.recharts-text { fill: #49616e; font-size: 11px; }

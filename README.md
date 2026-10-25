@@ -1,64 +1,39 @@
-# CVE Atlas — Georgia Tech CS 6730
+# CVEs: Profiling Software Vulnerabilities over the Years
 
-An interactive, scroll-based project starter for **“CVEs: Profiling Software Vulnerabilities Over the Years.”** It has five narrative sections, a responsive sticky navigation, shared linked-filter state, a functional Recharts annual trend interaction, and a D3 packed-circle drill-down prototype.
+Group project for CS 6730 Data Visualization: Principles and Applications (Fall 2026).
 
-## Stack
+Team Can Visualize Everything: Abhinav Shaurya Agarwal, Arkishman Ghosh, Wesley Jeong, Robert Caleb Jones, Brian Yang
 
-Next.js App Router, TypeScript, Tailwind CSS, Recharts, and D3.js.
+Our website is a scrolling data story about CVEs, which are publicly reported software vulnerabilities. It looks at how many get published each year, how severe they are, and what kinds of weaknesses (CWEs) cause them. We built it with Next.js, Recharts and D3.
 
-## Run locally
+## Running the website
+
+You'll need Node.js 20.9 or newer. You can check your version with `node -v`. If it's older, download the LTS version from https://nodejs.org (npm comes with it).
+
+In a terminal, go to this folder and run:
 
 ```bash
 npm install
 npm run dev
 ```
 
-Then open `http://localhost:3000`.
+`npm install` needs internet and takes around 30 seconds. Once `npm run dev` is running, open http://localhost:3000. If port 3000 is already taken, Next.js will pick another port and print the link in the terminal.
 
-## Production check
+## Sections
 
-```bash
-npm run build
-npm run start
-```
+- **Trends**: CVE records by year. You can filter by CVSS severity, record status and assigner, and click on a year to select it.
+- **Patterns**: a spider chart of the overall risk profile for a publication year, which you can compare with all years. This section also has two placeholders (CWE prevalence and exploitation comparison) for views we're still working on.
+- **Priorities**: a CWE funnel. The buttons switch the shading between volume, severity and exploitation.
+- **Explorer**: a D3 "weakness constellation". Click a circle to select a weakness. This one still uses sample data.
+
+## Code
+
+- `app/page.tsx` has the page layout and the story text
+- Each chart is its own file in `components/` (AnnualTrendChart, CveSpiderChart, CweFunnel, CweDrilldown, and PlaceholderChart for the placeholders)
+- `data/` has the data files the charts use
+- `scripts/` has the Python scripts we used to make those files
+- `lib/` has shared types and the sample data for the Explorer view
 
 ## Data
 
-The annual trend and CVE risk-profile spider chart use aggregates generated from the ignored root-level `cve_data.csv` file. The CWE drill-down continues to use illustrative values from `lib/sample-data.ts`.
-
-Regenerate both chart data files after updating the source CSV:
-
-```bash
-python scripts/build-cve-profile-data.py cve_data.csv data/cve-profile.json
-python scripts/build-annual-trend-data.py cve_data.csv data/cve-annual-trend.json
-```
-
-The spider aggregate includes published records with a valid publication date. The annual trend includes any status with a valid publication date and supports filtering by severity, status, and assigner. Neither aggregate contains record-level CVE data.
-
-### Spider chart
-
-The interactive spider chart in `components/CveSpiderChart.tsx` compares one publication year with an all-years baseline. Its source is `data/cve-profile.json`, generated from `cve_data.csv`. It includes `PUBLISHED` records with a valid publication date; rejected and undated records are excluded. An `n/a` in a field does not remove a record from the dataset, but it can mean the record does not contribute to the corresponding metric. The aggregate currently contains 395,208 records.
-
-The five spokes are:
-
-| Spoke | Meaning and calculation | Scale |
-|---|---|---|
-| **CVSS coverage** | Records with a numeric CVSS score ÷ all included records × 100. | Percent, 0–100. |
-| **High / critical** | Scored records whose CVSS severity is `HIGH` or `CRITICAL` ÷ all scored records × 100. | Percent, 0–100. |
-| **Vendor diversity** | For each year, count distinct non-empty Vendor labels per 1,000 included records. `n/a` and `Unknown` labels are not counted; labels are deduplicated without regard to case. | Indexed: yearly rate ÷ highest yearly rate × 100. The peak is 2025 at 192.21 distinct vendors per 1,000 records (100 index points). The tooltip reports the unindexed rate. |
-| **CWE identified** | Records whose CVE Problem Types contains a `CWE-` identifier ÷ all included records × 100. | Percent, 0–100. |
-| **Mean CVSS / 10** | Arithmetic mean of numeric CVSS scores, multiplied by 10 to put it on a 0–100 display scale. | Scaled score, 0–100; this is not a percentage. |
-
-The all-years values for the four non-vendor spokes are calculated over all included records using each measure's denominator above. The all-years vendor rate is the record-weighted average of annual vendor rates (sum of each year's distinct-vendor count ÷ total records × 1,000); a vendor appearing in multiple years contributes once in each year. Its radar value is indexed using the same 2025 maximum as the yearly values.
-
-## Collaboration map
-
-- `app/page.tsx` — story structure and shared interaction state
-- `components/AnnualTrendChart.tsx` — working annual trend view
-- `components/CweDrilldown.tsx` — D3 advanced drill-down prototype
-- `components/PlaceholderChart.tsx` — replaceable visualization drafts
-- `lib/types.ts` — shared data and filter contracts
-- `lib/sample-data.ts` — temporary, clearly labeled sample values
-- `data/` — cleaned data contract and local data files
-
-This split lets teammates add a visualization in its own component while consuming the same `Filters` shape. Before making claims, connect validated cleaned data and cite the CVE/CVSS/CWE/exploitation sources and all cleaning decisions in the process book.
+The site only uses the small files in `data/`, which are included. We left out the full cleaned dataset (`cve_data.csv`, about 74 MB, made from the CVE List V5 and CISA's Known Exploited Vulnerabilities catalog) since it's too big to submit, and you don't need it to run the site. You can download it here: https://drive.google.com/file/d/1VCMeUCA9ldz7FILtE6PfnhclhxqQ1FCR/view?usp=drive_link

@@ -38,13 +38,7 @@ export default function Home() {
       kicker="Interactive exploration" 
       title="Drill into vulnerabilities by severity and vendor."
     />
-    {cveLoading ? (
-      <div className="py-12 text-center text-slate-600">Loading CVE data...</div>
-    ) : cveData ? (
-      <CVEExplorer cveData={cveData} />
-    ) : (
-      <div className="py-12 text-center text-red-600">Failed to load CVE data</div>
-    )}
+    <CVEExplorer />
   </div>
 </section>
 

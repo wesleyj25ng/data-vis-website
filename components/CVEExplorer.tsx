@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import cveDataJson from '../data/grouped-cves.json';
 import { CVEResponse, CVEData } from '../types';
 import SeverityLevel from './SeverityLevel';
 import VendorSelector from './VendorSelector';
@@ -6,6 +7,7 @@ import CVEList from './CVEList';
 import CVEDetails from './CVEDetails';
 import './CVEExplorer.css';
 
+const cveData = cveDataJson as CVEResponse;
 type NavigationLevel = 'severity' | 'vendor' | 'cveList' | 'details';
 
 interface NavigationState {
@@ -15,11 +17,7 @@ interface NavigationState {
   selectedCVE?: CVEData;
 }
 
-interface CVEExplorerProps {
-  cveData: CVEResponse;
-}
-
-export const CVEExplorer: React.FC<CVEExplorerProps> = ({ cveData }) => {
+export const CVEExplorer: React.FC = () => {
   const [navigation, setNavigation] = useState<NavigationState>({
     level: 'severity',
   });

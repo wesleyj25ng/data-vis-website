@@ -24,13 +24,13 @@ export const CVEList: React.FC<CVEListProps> = ({
       <div className="cve-list">
         {cves.map((cve) => (
           <button
-            key={cve.id}
+            key={cve['CVE ID']}
             className="cve-item"
             onClick={() => onCVEClick(cve)}
           >
-            <div className="cve-id">{cve.id}</div>
-            <div className="cve-title">{cve.title}</div>
-            <div className="cve-score">Score: {cve.score}</div>
+            <div className="cve-id">{cve['CVE ID']}</div>
+            <div className="cve-product">{cve['Product']}</div>
+            <div className="cve-score">Score: {cve['CVSS Score']}</div>
           </button>
         ))}
       </div>

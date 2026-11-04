@@ -1,17 +1,20 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AnnualTrendChart } from "../components/AnnualTrendChart";
 import { CweDrilldown } from "../components/CweDrilldown";
 import { CweFunnel } from "../components/CweFunnel";
 import { CveSpiderChart } from "../components/CveSpiderChart";
 import { PlaceholderChart } from "../components/PlaceholderChart";
 import { SectionHeader } from "../components/SectionHeader";
+import { CVEExplorer } from "../components/CVEExplorer";
 import { Filters } from "../lib/types";
 
-const nav = [["01", "Context", "introduction"], ["02", "Trends", "trends"], ["03", "Patterns", "patterns"], ["04", "Priorities", "priorities"], ["05", "Explorer", "explorer"], ["06", "Notes", "notes"]] as const;
+const nav = [["01", "Context", "introduction"], ["02", "Trends", "trends"], ["03", "Patterns", "patterns"], ["04", "Priorities", "priorities"], ["05", "Explorer", "explorer"], ["06", "CVE Viewer", "cve-viewer"], ["07", "Notes", "notes"]] as const;
 
 export default function Home() {
  const [filters, setFilters] = useState<Filters>({ year: null, severity: "all", cwe: null });
+ const [cveData, setCveData] = useState<CVEResponse | null>(null);
+ const [cveLoading, setCveLoading] = useState(true);
  const active = filters.year || filters.cwe;
  return <main>
   <nav className="sticky top-0 z-30 flex items-center justify-between border-b border-[#27b6ff]/30 bg-[#071a2b]/95 px-5 py-3 text-white backdrop-blur md:px-8"><a href="#introduction" className="display text-xl font-bold">CVE <i className="text-[#c7f464]">Atlas</i></a><div className="hidden gap-4 lg:flex">{nav.map(([n, label, id]) => <a className="eyebrow text-white/65 hover:text-[#c7f464]" href={`#${id}`} key={id}>{n} {label}</a>)}</div><span className="eyebrow border border-[#c7f464]/50 px-3 py-1 text-[#c7f464]">GT CS 6730 · 2026</span></nav>
@@ -27,6 +30,23 @@ export default function Home() {
   <section id="priorities" className="section-rule px-5 py-16 md:px-8 md:py-24"><div className="mx-auto max-w-6xl"><SectionHeader index="03" kicker="Where to test first" title="Which vulnerability classes deserve attention first."/><p className="mb-8 max-w-3xl border-l-2 border-[#137cbe] pl-5 text-sm leading-6 text-slate-600">213,374 published CVEs with an assigned CWE, grouped into four testing-priority categories. The funnel shape is fixed (top = highest priority to test); hover a band or a stat card to spotlight it, and switch the metric to see which category leads on that number.</p><CweFunnel/></div></section>
 
   <section id="explorer" className="section-rule bg-[#dce9ef] px-5 py-16 md:px-8 md:py-24"><div className="mx-auto max-w-6xl"><SectionHeader index="04" kicker="Advanced visualization" title="Move from an overview into a weakness family."/><div className="grid gap-8 lg:grid-cols-[1.2fr_.8fr]"><CweDrilldown filters={filters} setFilters={setFilters}/><div className="chart-card flex flex-col justify-between p-6"><div><p className="eyebrow text-[#137cbe]">Drill-down state</p><h3 className="display mt-2 text-3xl">Selection travels with the narrative.</h3><div className="mt-6 space-y-4 text-sm"><div className="border-b border-[#071a2b]/15 pb-3"><span className="block text-xs font-bold uppercase text-slate-500">Year</span><span className="text-xl font-bold">{filters.year ?? "All sample years"}</span></div><div className="border-b border-[#071a2b]/15 pb-3"><span className="block text-xs font-bold uppercase text-slate-500">Weakness</span><span className="text-xl font-bold">{filters.cwe ?? "None selected"}</span></div></div></div><button onClick={() => setFilters({ year: null, severity: "all", cwe: null })} className="mt-8 self-start bg-[#c7f464] px-4 py-3 text-sm font-bold hover:bg-[#137cbe] hover:text-white">Reset linked filters</button></div></div><div className="mt-8 border-l-2 border-[#137cbe] pl-5 text-sm leading-6 text-slate-600">Design intent: a packed-circle overview supports category comparison, while selecting a node establishes a shared context for future linked detail views. The final version will use the team’s cleaned CWE mapping and transparent aggregation rules.</div></div></section>
+
+<section id="cve-viewer" className="section-rule px-5 py-16 md:px-8 md:py-24">
+  <div className="mx-auto max-w-6xl">
+    <SectionHeader 
+      index="06" 
+      kicker="Interactive exploration" 
+      title="Drill into vulnerabilities by severity and vendor."
+    />
+    {cveLoading ? (
+      <div className="py-12 text-center text-slate-600">Loading CVE data...</div>
+    ) : cveData ? (
+      <CVEExplorer cveData={cveData} />
+    ) : (
+      <div className="py-12 text-center text-red-600">Failed to load CVE data</div>
+    )}
+  </div>
+</section>
 
   <section id="notes" className="bg-[#071a2b] px-5 py-16 text-white md:px-8 md:py-24"><div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1fr_1fr]"><div><p className="eyebrow text-[#c7f464]">05 · Conclusions & care</p><h2 className="display mt-3 text-5xl">What this project can—and cannot—say.</h2></div><div className="grid gap-6 text-sm leading-6 text-slate-300 md:grid-cols-2"><div><h3 className="mb-2 font-bold text-white">Methodology</h3><p>The spider chart aggregates published records by year. The annual trend groups records with valid publication dates by year, status, severity, and assigner. Undated records cannot appear on the annual axis.</p></div><div><h3 className="mb-2 font-bold text-white">Prototype status</h3><p>The annual trend and spider chart use aggregates from cve_data.csv. The weakness view still uses illustrative values; other frames are intentional design drafts.</p></div><div><h3 className="mb-2 font-bold text-white">Collaboration</h3><p>The code separates sections, reusable charts, types, and data adapters so five teammates can own independent visualizations without rewriting the story shell.</p></div><div><h3 className="mb-2 font-bold text-white">Sources to document</h3><p>Final work should cite the CVE List, CVE Program documentation, CVSS source fields, and any exploitation dataset used—plus cleaning decisions in the process book.</p></div></div></div></section>
   {active && <div className="fixed bottom-4 right-4 z-40 border border-[#071a2b] bg-[#c7f464] px-4 py-3 text-sm font-bold shadow-[4px_4px_0_#071a2b]">Filter active: {filters.year ? `${filters.year}` : filters.cwe}</div>}

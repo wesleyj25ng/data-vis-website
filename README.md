@@ -24,6 +24,7 @@ npm run dev
 - **Trends**: CVE records by year. You can filter by CVSS severity, record status and assigner, and click on a year to select it.
 - **Patterns**: a spider chart of the overall risk profile for a publication year, which you can compare with all years. Below it are a CWE heatmap (the 20 most common weakness types by CVSS severity) and the vendor exploitation chart (published CVEs vs CVEs in CISA's KEV catalog per vendor). Click a vendor to see which weakness types were exploited.
 - **Priorities**: a CWE funnel. The buttons switch the shading between volume, severity and exploitation.
+- **Severity**: a heatmap of CVE counts by CVSS severity for the ten most-reported CWEs. Hover a cell for the exact count and its share of that CWE.
 - **Explorer**: a D3 "weakness constellation". Click a circle to select a weakness. This one still uses sample data.
 
 ## Code

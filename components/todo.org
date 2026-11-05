@@ -1,0 +1,6 @@
+1. Add descriptions to CVEs for innovative view
+2. Group CVEs based on year
+   - make zoom function so bugs appear small but zoom in to click
+3. make image connecting all severities
+4. include disclaimer that vendors with less than 10 CVEs are not included
+   

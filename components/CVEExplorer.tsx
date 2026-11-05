@@ -28,11 +28,12 @@ export const CVEExplorer: React.FC = () => {
     return Object.keys(cveData[navigation.selectedSeverity as keyof CVEResponse] || {});
   }, [navigation.selectedSeverity, cveData]);
 
-  const cves = useMemo(() => {
-    if (!navigation.selectedSeverity || !navigation.selectedVendor) return [];
-    const severity = navigation.selectedSeverity as keyof CVEResponse;
-    return cveData[severity]?.[navigation.selectedVendor] || [];
-  }, [navigation.selectedSeverity, navigation.selectedVendor, cveData]);
+  const cves =
+  navigation.selectedSeverity && navigation.selectedVendor
+    ? cveData[
+        navigation.selectedSeverity.toUpperCase() as keyof CVEResponse
+      ]?.vendors?.[navigation.selectedVendor] ?? []
+    : [];
 
   // Navigation handlers
   const handleSeverityClick = (severity: string) => {

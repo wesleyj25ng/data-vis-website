@@ -9,11 +9,16 @@ export interface VendorCVEs {
   [vendor: string]: CVEData[];
 }
 
+export interface SeverityData {
+  count: number;
+  vendors: VendorCVEs;
+}
+
 export interface CVEResponse {
-  critical: VendorCVEs;
-  high: VendorCVEs;
-  medium: VendorCVEs;
-  low: VendorCVEs;
+  CRITICAL: SeverityData;
+  HIGH: SeverityData;
+  MEDIUM: SeverityData;
+  LOW: SeverityData;
 }
 
 export interface Filters {

@@ -1,0 +1,232 @@
+{
+ "sourceRows": 413843,
+ "recordsWithCwe": 213374,
+ "severities": [
+  "CRITICAL",
+  "HIGH",
+  "MEDIUM",
+  "LOW"
+ ],
+ "cwes": [
+  {
+   "id": "CWE-89",
+   "name": "SQL injection",
+   "records": 13667,
+   "counts": [
+    1480,
+    3104,
+    6319,
+    39
+   ]
+  },
+  {
+   "id": "CWE-78",
+   "name": "OS command injection",
+   "records": 4915,
+   "counts": [
+    1126,
+    2001,
+    882,
+    39
+   ]
+  },
+  {
+   "id": "CWE-94",
+   "name": "Code injection",
+   "records": 4795,
+   "counts": [
+    718,
+    1026,
+    1857,
+    43
+   ]
+  },
+  {
+   "id": "CWE-284",
+   "name": "Improper access control",
+   "records": 7795,
+   "counts": [
+    641,
+    2377,
+    2782,
+    254
+   ]
+  },
+  {
+   "id": "CWE-22",
+   "name": "Path traversal",
+   "records": 6431,
+   "counts": [
+    541,
+    2264,
+    2059,
+    152
+   ]
+  },
+  {
+   "id": "CWE-79",
+   "name": "Cross-site scripting (XSS)",
+   "records": 31582,
+   "counts": [
+    446,
+    5321,
+    17494,
+    1315
+   ]
+  },
+  {
+   "id": "CWE-121",
+   "name": "Stack-based buffer overflow",
+   "records": 4068,
+   "counts": [
+    415,
+    2108,
+    494,
+    45
+   ]
+  },
+  {
+   "id": "CWE-20",
+   "name": "Improper input validation",
+   "records": 5869,
+   "counts": [
+    388,
+    1751,
+    1752,
+    212
+   ]
+  },
+  {
+   "id": "CWE-862",
+   "name": "Missing authorization",
+   "records": 9821,
+   "counts": [
+    376,
+    1894,
+    5987,
+    195
+   ]
+  },
+  {
+   "id": "CWE-787",
+   "name": "Out-of-bounds write",
+   "records": 5649,
+   "counts": [
+    229,
+    2142,
+    641,
+    73
+   ]
+  },
+  {
+   "id": "CWE-122",
+   "name": "Heap-based buffer overflow",
+   "records": 3695,
+   "counts": [
+    215,
+    2239,
+    525,
+    62
+   ]
+  },
+  {
+   "id": "CWE-119",
+   "name": "Memory buffer bounds error",
+   "records": 3581,
+   "counts": [
+    213,
+    1610,
+    793,
+    59
+   ]
+  },
+  {
+   "id": "CWE-918",
+   "name": "Server-side request forgery (SSRF)",
+   "records": 3408,
+   "counts": [
+    194,
+    932,
+    1597,
+    135
+   ]
+  },
+  {
+   "id": "CWE-863",
+   "name": "Incorrect authorization",
+   "records": 3582,
+   "counts": [
+    191,
+    964,
+    1307,
+    214
+   ]
+  },
+  {
+   "id": "CWE-200",
+   "name": "Sensitive information exposure",
+   "records": 5364,
+   "counts": [
+    150,
+    800,
+    2344,
+    401
+   ]
+  },
+  {
+   "id": "CWE-74",
+   "name": "Injection",
+   "records": 5186,
+   "counts": [
+    147,
+    258,
+    4516,
+    158
+   ]
+  },
+  {
+   "id": "CWE-416",
+   "name": "Use after free",
+   "records": 6011,
+   "counts": [
+    144,
+    2762,
+    489,
+    109
+   ]
+  },
+  {
+   "id": "CWE-125",
+   "name": "Out-of-bounds read",
+   "records": 5926,
+   "counts": [
+    93,
+    1480,
+    2030,
+    586
+   ]
+  },
+  {
+   "id": "CWE-352",
+   "name": "Cross-site request forgery (CSRF)",
+   "records": 6721,
+   "counts": [
+    90,
+    1387,
+    3517,
+    104
+   ]
+  },
+  {
+   "id": "CWE-400",
+   "name": "Uncontrolled resource consumption",
+   "records": 3338,
+   "counts": [
+    19,
+    1037,
+    1164,
+    106
+   ]
+  }
+ ]
+}

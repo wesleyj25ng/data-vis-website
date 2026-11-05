@@ -29,7 +29,20 @@ def group_cves(records):
 
     # Convert defaultdicts to regular dicts for JSON serialization.
     return {
-        severity: dict(vendors)
+        severity: {
+            "count": sum(len(cves) for cves in vendors.values()),
+            "vendors": dict(
+                sorted(
+                    (
+                        (vendor, cves)
+                        for vendor, cves in vendors.items()
+                        if len(cves) >= 10
+                    ),
+                    key=lambda item: len(item[1]),
+                    reverse=True,
+                )
+            ),
+        }
         for severity, vendors in grouped.items()
     }
 

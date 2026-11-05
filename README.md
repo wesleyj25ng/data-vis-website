@@ -23,13 +23,13 @@ npm run dev
 
 - **Trends**: CVE records by year. You can filter by CVSS severity, record status and assigner, and click on a year to select it.
 - **Patterns**: a spider chart of the overall risk profile for a publication year, which you can compare with all years. This section also has two placeholders (CWE prevalence and exploitation comparison) for views we're still working on.
-- **Priorities**: a CWE funnel. The buttons switch the shading between volume, severity and exploitation.
+- **Severity**: a heatmap of CVE counts by CVSS severity for the ten most-reported CWEs. Hover a cell for the exact count and its share of that CWE.
 - **Explorer**: a D3 "weakness constellation". Click a circle to select a weakness. This one still uses sample data.
 
 ## Code
 
 - `app/page.tsx` has the page layout and the story text
-- Each chart is its own file in `components/` (AnnualTrendChart, CveSpiderChart, CweFunnel, CweDrilldown, and PlaceholderChart for the placeholders)
+- Each chart is its own file in `components/` (AnnualTrendChart, CveSpiderChart, CweSeverityHeatmap, CweDrilldown, and PlaceholderChart for the placeholders)
 - `data/` has the data files the charts use
 - `scripts/` has the Python scripts we used to make those files
 - `lib/` has shared types and the sample data for the Explorer view

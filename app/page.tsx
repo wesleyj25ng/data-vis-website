@@ -2,13 +2,13 @@
 import { useState } from "react";
 import { AnnualTrendChart } from "../components/AnnualTrendChart";
 import { CweDrilldown } from "../components/CweDrilldown";
-import { CweFunnel } from "../components/CweFunnel";
+import { CweSeverityHeatmap } from "../components/CweSeverityHeatmap";
 import { CveSpiderChart } from "../components/CveSpiderChart";
 import { PlaceholderChart } from "../components/PlaceholderChart";
 import { SectionHeader } from "../components/SectionHeader";
 import { Filters } from "../lib/types";
 
-const nav = [["01", "Context", "introduction"], ["02", "Trends", "trends"], ["03", "Patterns", "patterns"], ["04", "Priorities", "priorities"], ["05", "Explorer", "explorer"], ["06", "Notes", "notes"]] as const;
+const nav = [["01", "Context", "introduction"], ["02", "Trends", "trends"], ["03", "Patterns", "patterns"], ["04", "Severity", "severity"], ["05", "Explorer", "explorer"], ["06", "Notes", "notes"]] as const;
 
 export default function Home() {
  const [filters, setFilters] = useState<Filters>({ year: null, severity: "all", cwe: null });
@@ -24,7 +24,7 @@ export default function Home() {
 
   <section id="patterns" className="section-rule bg-[#dce9ef] px-5 py-16 md:px-8 md:py-24"><div className="mx-auto max-w-6xl"><SectionHeader index="02" kicker="Comparing the records" title="Severity, weaknesses, and exploitation—side by side."/><CveSpiderChart/><div className="mt-8 grid gap-7 md:grid-cols-2"><PlaceholderChart title="CWE prevalence" description="Ranked or grouped weakness categories, filterable by time period and linked to the drill-down."/><PlaceholderChart title="Exploitation comparison" description="A planned comparison of known-exploitation status with severity and disclosure timing, pending validated source fields." accent="#d65245"/></div><p className="mt-6 max-w-3xl text-sm leading-6 text-slate-600">The spider chart summarizes the supplied CVE dataset; the remaining frames are prototypes. Interpret coverage measures alongside the source’s substantial missingness.</p></div></section>
 
-  <section id="priorities" className="section-rule px-5 py-16 md:px-8 md:py-24"><div className="mx-auto max-w-6xl"><SectionHeader index="03" kicker="Where to test first" title="Which vulnerability classes deserve attention first."/><p className="mb-8 max-w-3xl border-l-2 border-[#137cbe] pl-5 text-sm leading-6 text-slate-600">213,374 published CVEs with an assigned CWE, grouped into four testing-priority categories. The funnel shape is fixed (top = highest priority to test); hover a band or a stat card to spotlight it, and switch the metric to see which category leads on that number.</p><CweFunnel/></div></section>
+  <section id="severity" className="section-rule px-5 py-16 md:px-8 md:py-24"><div className="mx-auto max-w-6xl"><SectionHeader index="03" kicker="Severity by weakness" title="The most common weaknesses carry very different severity."/><CweSeverityHeatmap/></div></section>
 
   <section id="explorer" className="section-rule bg-[#dce9ef] px-5 py-16 md:px-8 md:py-24"><div className="mx-auto max-w-6xl"><SectionHeader index="04" kicker="Advanced visualization" title="Move from an overview into a weakness family."/><div className="grid gap-8 lg:grid-cols-[1.2fr_.8fr]"><CweDrilldown filters={filters} setFilters={setFilters}/><div className="chart-card flex flex-col justify-between p-6"><div><p className="eyebrow text-[#137cbe]">Drill-down state</p><h3 className="display mt-2 text-3xl">Selection travels with the narrative.</h3><div className="mt-6 space-y-4 text-sm"><div className="border-b border-[#071a2b]/15 pb-3"><span className="block text-xs font-bold uppercase text-slate-500">Year</span><span className="text-xl font-bold">{filters.year ?? "All sample years"}</span></div><div className="border-b border-[#071a2b]/15 pb-3"><span className="block text-xs font-bold uppercase text-slate-500">Weakness</span><span className="text-xl font-bold">{filters.cwe ?? "None selected"}</span></div></div></div><button onClick={() => setFilters({ year: null, severity: "all", cwe: null })} className="mt-8 self-start bg-[#c7f464] px-4 py-3 text-sm font-bold hover:bg-[#137cbe] hover:text-white">Reset linked filters</button></div></div><div className="mt-8 border-l-2 border-[#137cbe] pl-5 text-sm leading-6 text-slate-600">Design intent: a packed-circle overview supports category comparison, while selecting a node establishes a shared context for future linked detail views. The final version will use the team’s cleaned CWE mapping and transparent aggregation rules.</div></div></section>
 

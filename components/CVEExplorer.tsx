@@ -3,7 +3,7 @@ import cveDataJson from '../data/grouped-cves.json';
 import { CVEResponse, CVEData } from '../types';
 import SeverityLevel from './SeverityLevel';
 import VendorSelector from './VendorSelector';
-import CVEList from './CVEList';
+import CVEYearMap from './CVEYearMap'
 import CVEDetails from './CVEDetails';
 import './CVEExplorer.css';
 
@@ -115,9 +115,8 @@ return (
         )}
 
         {navigation.level === 'cveList' && (
-          <CVEList
+          <CVEYearMap
             cves={cves}
-            vendor={navigation.selectedVendor || ''}
             severity={navigation.selectedSeverity || ''}
             onCVEClick={handleCVEClick}
           />

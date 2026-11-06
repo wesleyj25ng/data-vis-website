@@ -41,3 +41,10 @@
   font-size: 0.85rem;
   color: #666;
 }
+
+.show-more-button {
+  display: block;
+  margin: 1rem auto;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+}

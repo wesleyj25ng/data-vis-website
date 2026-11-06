@@ -5,10 +5,10 @@ import { CVEResponse } from '../types';
 import './SeverityLevel.css';
 
 const severityImages: Record<string, string> = {
-  CRITICAL: '/images/critical2.png',
-  HIGH: '/images/high.png',
-  MEDIUM: '/images/medium.png',
-  LOW: '/images/low.png',
+  CRITICAL: '/images/yellow_jacket_nest.png',
+  HIGH: '/images/beehive.png',
+  MEDIUM: '/images/anthill.png',
+  LOW: '/images/grass.png',
 };
 
 interface SeverityLevelProps {

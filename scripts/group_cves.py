@@ -25,6 +25,9 @@ def group_cves(records):
             )
 
         vendor = str(cve.get("Vendor") or "Unknown").strip()
+        if vendor.casefold() == "n/a":
+            continue
+        
         grouped[severity][vendor].append(cve)
 
     # Convert defaultdicts to regular dicts for JSON serialization.

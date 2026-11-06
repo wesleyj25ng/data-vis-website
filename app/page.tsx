@@ -4,7 +4,6 @@ import { AnnualTrendChart } from "../components/AnnualTrendChart";
 import { CweDrilldown } from "../components/CweDrilldown";
 import { CweSeverityHeatmap } from "../components/CweSeverityHeatmap";
 import { CveSpiderChart } from "../components/CveSpiderChart";
-import { CweSeverityHeatmap } from "../components/CweSeverityHeatmap";
 import { SectionHeader } from "../components/SectionHeader";
 import { VendorExploitationChart } from "../components/VendorExploitationChart";
 import { Filters } from "../lib/types";

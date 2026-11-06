@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import cveDataJson from '../data/grouped-cves.json';
+import cveDataJson from '../data/cves_with_descriptions.json';
 import { CVEResponse, CVEData } from '../types';
 import SeverityLevel from './SeverityLevel';
 import VendorSelector from './VendorSelector';

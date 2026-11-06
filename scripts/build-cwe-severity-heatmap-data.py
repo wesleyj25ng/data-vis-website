@@ -8,6 +8,9 @@ Same rules as the Tableau version, which used cve_data_expand_cwes.csv
 - rows are the CVSS severities Critical, High, Medium and Low (unscored records are not shown)
 - each cell counts CVE records with that CWE and severity
 - a CVE with two CWEs counts under both
+
+The output also has "byYear": for each publication year, [records, critical, high, medium, low]
+per CWE, so the page can link the heatmap to the year selected in the trend chart.
 """
 import csv
 import json
@@ -30,6 +33,7 @@ def main():
 
     totals = Counter()     # CWE -> CVE records (any severity)
     cells = Counter()      # (CWE, severity) -> CVE records
+    yearly = {}            # year -> CWE -> [records, critical, high, medium, low]
     source_rows = 0
     records_with_cwe = 0
 
@@ -41,10 +45,16 @@ def main():
                 continue
             records_with_cwe += 1
             severity = row["CVSS Severity"].strip().upper()
+            year = row["Date Published"].strip()[:4]
             for cwe in cwes:
                 totals[cwe] += 1
                 if severity in SEVERITIES:
                     cells[(cwe, severity)] += 1
+                if year.isdigit():
+                    entry = yearly.setdefault(year, {}).setdefault(cwe, [0, 0, 0, 0, 0])
+                    entry[0] += 1
+                    if severity in SEVERITIES:
+                        entry[1 + SEVERITIES.index(severity)] += 1
 
     top = [cwe for cwe, _ in sorted(totals.items(), key=lambda item: (-item[1], int(item[0][4:])))[:TOP_CWES]]
     # same column order as the Tableau sheet: most Critical records first
@@ -63,6 +73,10 @@ def main():
             }
             for cwe in top
         ],
+        "byYear": {
+            year: {cwe: yearly[year][cwe] for cwe in top if cwe in yearly[year]}
+            for year in sorted(yearly)
+        },
     }
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("w", encoding="utf-8", newline="\n") as output:

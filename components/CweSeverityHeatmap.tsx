@@ -8,6 +8,7 @@ import heatmapData from "../data/cwe-severity-heatmap.json";
 // The Tableau version has CWEs as columns; here they are rows so every label reads horizontally.
 
 type Cwe = (typeof heatmapData.cwes)[number];
+type YearEntries = Record<string, number[]>;
 type ColorMode = "count" | "share";
 type SortMode = "critical" | "records" | "criticalShare";
 
@@ -27,28 +28,42 @@ function scored(cwe: Cwe) {
   return cwe.counts.reduce((sum, n) => sum + n, 0);
 }
 
+// Share of the row's scored CVEs; a CWE with none in the selected year has no share.
+function shareOf(n: number, cwe: Cwe) {
+  return scored(cwe) ? n / scored(cwe) : 0;
+}
+
 function percent(value: number) {
   return `${(value * 100).toFixed(1)}%`;
 }
 
 type Cell = { id: string; severity: number };
 
-export function CweSeverityHeatmap() {
+type LinkProps = { year: number | null; clearYear: () => void; selectedCwe: string | null; setSelectedCwe: (cwe: string | null) => void };
+
+export function CweSeverityHeatmap({ year, clearYear, selectedCwe, setSelectedCwe }: LinkProps) {
   const [colorMode, setColorMode] = useState<ColorMode>("count");
   const [sortMode, setSortMode] = useState<SortMode>("critical");
   const [hovered, setHovered] = useState<Cell | null>(null);
   const [pinned, setPinned] = useState<Cell | null>(null);
   const active = hovered ?? pinned;
 
+  // Linked to the trend chart: with a year selected, every row is re-counted for CVEs published that year.
   const cwes = useMemo(() => {
-    const list = [...heatmapData.cwes];
+    const yearEntries = year ? ((heatmapData.byYear as Record<string, YearEntries>)[String(year)] ?? {}) : null;
+    const list = heatmapData.cwes.map((cwe) => {
+      if (!yearEntries) return cwe;
+      const entry = yearEntries[cwe.id] ?? [0, 0, 0, 0, 0];
+      return { ...cwe, records: entry[0], counts: entry.slice(1) };
+    });
     if (sortMode === "records") list.sort((a, b) => b.records - a.records);
-    if (sortMode === "criticalShare") list.sort((a, b) => b.counts[0] / scored(b) - a.counts[0] / scored(a));
+    if (sortMode === "criticalShare") list.sort((a, b) => shareOf(b.counts[0], b) - shareOf(a.counts[0], a));
+    if (sortMode === "critical" && yearEntries) list.sort((a, b) => b.counts[0] - a.counts[0] || b.records - a.records);
     return list;
-  }, [sortMode]);
+  }, [sortMode, year]);
 
   const value = (cwe: Cwe, severity: number) =>
-    colorMode === "count" ? cwe.counts[severity] : cwe.counts[severity] / scored(cwe);
+    colorMode === "count" ? cwe.counts[severity] : shareOf(cwe.counts[severity], cwe);
   const allValues = cwes.flatMap((cwe) => cwe.counts.map((_, s) => value(cwe, s)));
   const min = Math.min(...allValues);
   const max = Math.max(...allValues);
@@ -56,6 +71,7 @@ export function CweSeverityHeatmap() {
   const legendLabel = (v: number) => (colorMode === "count" ? Math.round(v).toLocaleString() : percent(v));
 
   const activeCwe = active ? cwes.find((c) => c.id === active.id) : undefined;
+  const selectedOffChart = selectedCwe !== null && !cwes.some((c) => c.id === selectedCwe);
 
   return (
     <div className="chart-card p-5 md:p-6">
@@ -64,6 +80,15 @@ export function CweSeverityHeatmap() {
           <p className="eyebrow text-[#137cbe]">CVE List · CVEs with a CWE and a CVSS severity</p>
           <h3 className="display mt-1 text-3xl">CWE heatmap: weakness type by severity</h3>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">The 20 weakness types (CWEs) with the most CVE records, split by CVSS severity.</p>
+        </div>
+        <div className="space-y-1 border border-[#071a2b]/20 bg-white/80 px-3 py-2 text-xs" aria-live="polite">
+          <span className="terminal-label block text-[9px] text-[#137cbe]">Linked to other charts</span>
+          <p>
+            {year ? <><b>Year: {year}</b> <button type="button" onClick={clearYear} className="ml-1 font-bold text-[#137cbe]">Clear</button></> : <span className="text-slate-600">All years · select a year in the trend chart</span>}
+          </p>
+          <p>
+            {selectedCwe ? <><b>Weakness: {selectedCwe}</b> <button type="button" onClick={() => setSelectedCwe(null)} className="ml-1 font-bold text-[#137cbe]">Clear</button></> : <span className="text-slate-600">No weakness · click a row or cell</span>}
+          </p>
         </div>
       </div>
 
@@ -98,6 +123,12 @@ export function CweSeverityHeatmap() {
         </div>
       </div>
 
+      {selectedOffChart && (
+        <p className="mt-4 border-l-2 border-[#137cbe] pl-3 text-xs text-slate-600">
+          {selectedCwe} is selected in another chart but is not one of the 20 most common weaknesses shown here.
+        </p>
+      )}
+
       <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]">
         <div
           className="grid min-w-0 gap-[2px] self-start"
@@ -113,13 +144,16 @@ export function CweSeverityHeatmap() {
           ))}
           {cwes.map((cwe) => (
             <div key={cwe.id} className="contents">
-              <span
-                className={`flex min-w-0 items-center gap-1.5 pr-2 text-xs ${active?.id === cwe.id ? "font-bold" : ""}`}
+              <button
+                type="button"
+                aria-pressed={selectedCwe === cwe.id}
+                onClick={() => setSelectedCwe(selectedCwe === cwe.id ? null : cwe.id)}
+                className={`flex min-w-0 items-center gap-1.5 pr-2 text-left text-xs ${active?.id === cwe.id || selectedCwe === cwe.id ? "font-bold" : ""} ${selectedCwe === cwe.id ? "bg-[#c7f464]/45" : ""} ${selectedCwe && selectedCwe !== cwe.id ? "opacity-55" : ""}`}
                 title={`${cwe.id} ${cwe.name}`}
               >
                 <span className="w-[3.6rem] shrink-0 tabular-nums text-slate-500 md:w-[4.1rem]">{cwe.id}</span>
                 <span className="truncate">{cwe.name}</span>
-              </span>
+              </button>
               {cwe.counts.map((n, s) => {
                 const isActive = active?.id === cwe.id && active.severity === s;
                 const isPinned = pinned?.id === cwe.id && pinned.severity === s;
@@ -130,11 +164,14 @@ export function CweSeverityHeatmap() {
                     aria-label={`${cwe.id} ${cwe.name}, ${severityLabels[s]}: ${n.toLocaleString()} CVEs`}
                     aria-pressed={isPinned}
                     className="block h-6 rounded-[2px] focus-visible:outline-2 focus-visible:outline-[#071a2b]"
-                    style={{ background: color(value(cwe, s)), outline: isActive ? "2px solid #071a2b" : undefined, outlineOffset: -1 }}
+                    style={{ background: color(value(cwe, s)), outline: isActive || selectedCwe === cwe.id ? "2px solid #071a2b" : undefined, outlineOffset: -1 }}
                     onMouseEnter={() => setHovered({ id: cwe.id, severity: s })}
                     onFocus={() => setHovered({ id: cwe.id, severity: s })}
                     onBlur={() => setHovered(null)}
-                    onClick={() => setPinned(isPinned ? null : { id: cwe.id, severity: s })}
+                    onClick={() => {
+                      setPinned(isPinned ? null : { id: cwe.id, severity: s });
+                      setSelectedCwe(isPinned ? null : cwe.id);
+                    }}
                   />
                 );
               })}
@@ -144,26 +181,34 @@ export function CweSeverityHeatmap() {
 
         <aside className="min-w-0 border-t border-[#071a2b]/15 pt-5 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
           <p className="eyebrow text-[#137cbe]">Read the chart</p>
-          <p className="mt-3 text-sm leading-6">
-            Cross-site scripting (CWE-79) is by far the most common weakness, but most of those CVEs are rated Medium.
-          </p>
-          <p className="mt-3 text-sm leading-6">
-            The top three for Critical CVEs are all injection bugs: SQL injection (CWE-89), OS command injection (CWE-78) and code
-            injection (CWE-94). Switch to <b>share</b> shading to compare rows of different sizes.
-          </p>
+          {year ? (
+            <p className="mt-3 text-sm leading-6">
+              Counts and shading are recomputed for CVEs published in {year}. Compare it with other years by selecting them in the trend chart. Switch to <b>share</b> shading to compare rows of different sizes.
+            </p>
+          ) : (
+            <>
+              <p className="mt-3 text-sm leading-6">
+                Cross-site scripting (CWE-79) is by far the most common weakness, but most of those CVEs are rated Medium.
+              </p>
+              <p className="mt-3 text-sm leading-6">
+                The top three for Critical CVEs are all injection bugs: SQL injection (CWE-89), OS command injection (CWE-78) and code
+                injection (CWE-94). Switch to <b>share</b> shading to compare rows of different sizes.
+              </p>
+            </>
+          )}
 
           <div className="mt-6 border border-[#071a2b]/20 bg-white/80 p-4" aria-live="polite">
             {activeCwe && active ? (
               <>
                 <p className="text-xs tabular-nums text-slate-500">{activeCwe.id}</p>
                 <p className="font-bold">{activeCwe.name}</p>
-                <p className="mt-1 text-xs text-slate-600">{activeCwe.records.toLocaleString()} CVE records in total, {scored(activeCwe).toLocaleString()} with a severity</p>
+                <p className="mt-1 text-xs text-slate-600">{activeCwe.records.toLocaleString()} CVE records {year ? `published in ${year}` : "in total"}, {scored(activeCwe).toLocaleString()} with a severity</p>
                 <div className="mt-3 space-y-1.5">
                   {activeCwe.counts.map((n, s) => (
                     <div key={s} className={`grid grid-cols-[4rem_1fr_auto] items-center gap-2 text-xs ${s === active.severity ? "font-bold" : "text-slate-600"}`}>
                       <span>{severityLabels[s]}</span>
                       <span className="block h-2.5 rounded-r-[3px] bg-[#137cbe]" style={{ width: `${(n / Math.max(...activeCwe.counts)) * 100}%`, opacity: s === active.severity ? 1 : 0.45 }} />
-                      <span className="tabular-nums">{n.toLocaleString()} · {percent(n / scored(activeCwe))}</span>
+                      <span className="tabular-nums">{n.toLocaleString()} · {percent(shareOf(n, activeCwe))}</span>
                     </div>
                   ))}
                 </div>

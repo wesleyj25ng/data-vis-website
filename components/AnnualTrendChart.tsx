@@ -153,7 +153,7 @@ export function AnnualTrendChart({
             data={chartData}
             onClick={(event) => {
               const year = event?.activeLabel;
-              if (year) setFilters({ ...filters, year: Number(year) });
+              if (year) setFilters({ ...filters, year: Number(year) === filters.year ? null : Number(year) });
             }}
             margin={{ top: 10, right: 12, left: -12, bottom: 0 }}
           >
@@ -185,7 +185,7 @@ export function AnnualTrendChart({
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-[#071a2b]/15 pt-3">
         <p className="terminal-label text-[10px] text-slate-500">
-          {totalMatching.toLocaleString()} records across displayed years · select a year to link it to other views
+          {totalMatching.toLocaleString()} records across displayed years · click a year to link it to the spider chart and heatmap (click again to clear)
         </p>
         {filters.year && (
           <p className="text-xs font-bold">Selected year: {filters.year}</p>

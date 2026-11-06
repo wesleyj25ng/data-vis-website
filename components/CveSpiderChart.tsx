@@ -70,8 +70,10 @@ function ProfileTooltip({
   );
 }
 
-export function CveSpiderChart() {
-  const [year, setYear] = useState(profileData.years[profileData.years.length - 1].year);
+// Linked to the trend chart: the selected year lives in the page's shared filters, so moving the slider here
+// marks the same year on the trend chart and re-counts the heatmap (and the reverse).
+export function CveSpiderChart({ year: selectedYear, setYear }: { year: number | null; setYear: (year: number) => void }) {
+  const year = selectedYear ?? profileData.years[profileData.years.length - 1].year;
   const [showOverall, setShowOverall] = useState(true);
   const profile = profileData.years.find((item) => item.year === year) as Profile;
   const data = metrics.map((metric) => ({

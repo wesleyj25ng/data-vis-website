@@ -14,3 +14,6 @@ out/
 # TypeScript build metadata
 *.tsbuildinfo
 node_modules
+
+# Python cache from the data scripts
+__pycache__/

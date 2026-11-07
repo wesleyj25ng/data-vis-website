@@ -180,3 +180,12 @@ def short_name(cwe, official):
 def cwe_label(cwe):
     """Short readable name for a CWE id like "CWE-79"."""
     return short_name(cwe, CWE_OFFICIAL.get(cwe))
+
+
+# Weaknesses in how software handles untrusted input: injection, cross-site scripting, path traversal,
+# unsafe file upload, SSRF, deserialization and input validation. Same grouping as the Tableau scripts (labels.py).
+INPUT_HANDLING_CWES = {
+    20, 22, 23, 25, 27, 35, 36, 39, 40, 44, 55, 59, 61, 73, 74, 77, 78, 79, 80, 88, 89, 91, 93, 94, 95, 96, 98, 99,
+    116, 134, 138, 158, 178, 184, 434, 436, 444, 470, 472, 473, 502, 601, 610, 611, 641, 706, 707, 790, 807, 917,
+    918, 1173, 1285, 1287, 1321, 1336,
+}

@@ -143,7 +143,7 @@ export default function Home() {
 
       <section id="explorer" className="section-rule scroll-mt-14 bg-[#dce9ef] px-5 py-16 md:px-8 md:py-24">
         <div className="mx-auto max-w-6xl">
-          <SectionHeader index="04" kicker="Interactive exploration" title="Drill into vulnerabilities by severity and vendor." />
+          <SectionHeader index="04" kicker="Interactive exploration" title="Discover (software) bugs by severity and vendor." />
           <CVEExplorer />
         </div>
       </section>
@@ -226,6 +226,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+
 
       {activeFilters.length > 0 && (
         <div className="fixed bottom-4 right-4 z-40 flex items-center gap-4 border border-[#071a2b] bg-[#c7f464] px-4 py-3 text-sm font-bold shadow-[4px_4px_0_#071a2b]">

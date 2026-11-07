@@ -14,9 +14,8 @@ const nav = [
   ["02", "Trends", "trends"],
   ["03", "Patterns", "patterns"],
   ["04", "Severity", "severity"],
-  ["05", "Explorer", "explorer"],
-  ["06", "CVE Viewer", "cve-viewer"],
-  ["07", "Notes", "notes"],
+  ["05", "CVE Viewer", "cve-viewer"],
+  ["06", "Conclusion", "conclusion"],
 ] as const;
 
 export default function Home() {
@@ -86,10 +85,9 @@ export default function Home() {
             </p>
 
             <p className="border-l-2 border-[#137cbe] pl-5 text-sm leading-6 text-slate-600">
-              The annual trend, spider chart, CWE heatmap and vendor
-              exploitation charts use aggregated values from{" "}
-              <b>cve_data.csv</b>. The Explorer view still uses illustrative
-              samples.
+              The annual trend, spider chart, CWE heatmap, vendor
+              exploitation charts, and CVE Viewer use aggregated values from{" "}
+              <b>cve_data.csv</b>.
             </p>
           </div>
 
@@ -217,70 +215,92 @@ export default function Home() {
           <SectionHeader
             index="04"
             kicker="Interactive exploration"
-            title="Drill into vulnerabilities by severity and vendor."
+            title="Discover (software) bugs by severity and vendor."
           />
           <CVEExplorer />
         </div>
       </section>
 
       <section
-        id="notes"
-        className="bg-[#071a2b] px-5 py-16 text-white md:px-8 md:py-24"
+  id="conclusion"
+  className="bg-[#071a2b] px-5 py-16 text-white md:px-8 md:py-24"
+>
+  <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1fr_1fr]">
+    <div>
+      <p className="eyebrow text-[#c7f464]">
+        05 · Conclusions &amp; care
+      </p>
+      <h2 className="display mt-3 text-5xl">
+        What this means for developers
+      </h2>
+    </div>
+
+    <div className="grid gap-6 text-lg leading-6 text-slate-300">
+      <div>
+        <h3 className="mb-2 font-bold text-white">Conclusion</h3>
+        <p>
+          As indicated by the heatmap, injection bugs are the most common type of CVE.
+          However, not only are they the most common type, they are also some of the most commonly exploited.
+          The bar chart comparison of CVE records versus KEV records indicates that
+          OS command injection and code injection both face real exploitation more commonly than most
+          other vulnerability types.<br /><br />
+
+          Developers need to test more often against injection vulnerabilities and understand the underlying cause
+          behind what allows these exploits to occur; if a user is allowed input into an application and this input
+          is not properly stored as data, it can be transformed into a command on the device.<br /><br />
+
+          The trend shows the number of CVEs is only increasing. Developers need to put more time into investigating
+          why bugs happen and how to prevent based on the existing information they have. A world with more secure
+          software is possible.
+        </p>
+      </div>
+
+      <div>
+  <h3 className="mb-3 text-2xl font-bold text-white">References</h3>
+  <p>
+    Data for this project was collected, compiled, and cleaned from the
+    following sources:
+  </p>
+  <ul className="mt-4 list-disc space-y-3 pl-6">
+    <li>
+      CVE repository:{" "}
+      <a
+        href="https://github.com/CVEProject/cvelistV5"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-[#c7f464] underline"
       >
-        <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1fr_1fr]">
-          <div>
-            <p className="eyebrow text-[#c7f464]">
-              05 · Conclusions &amp; care
-            </p>
-            <h2 className="display mt-3 text-5xl">
-              What this project can—and cannot—say.
-            </h2>
-          </div>
+        https://github.com/CVEProject/cvelistV5
+      </a>
+    </li>
+    <li>
+      KEV catalog:{" "}
+      <a
+        href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-[#c7f464] underline"
+      >
+        https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+      </a>
+    </li>
+    <li>
+      Information about CWEs:{" "}
+      <a
+        href="https://cwe.mitre.org/index.html"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-[#c7f464] underline"
+      >
+        https://cwe.mitre.org/index.html
+      </a>
+    </li>
+  </ul>
+</div>
+    </div>
+  </div>
+</section>
 
-          <div className="grid gap-6 text-sm leading-6 text-slate-300 md:grid-cols-2">
-            <div>
-              <h3 className="mb-2 font-bold text-white">Methodology</h3>
-              <p>
-                The spider chart aggregates published records by year. The
-                annual trend groups records with valid publication dates by
-                year, status, severity, and assigner. Undated records cannot
-                appear on the annual axis. The heatmap counts CVE records per
-                CWE and severity, and the vendor chart compares each vendor&apos;s
-                published CVEs with those in CISA&apos;s KEV catalog.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="mb-2 font-bold text-white">Prototype status</h3>
-              <p>
-                The annual trend, spider chart, CWE heatmap and vendor
-                exploitation charts use aggregates from cve_data.csv. The
-                Explorer view still uses illustrative values.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="mb-2 font-bold text-white">Collaboration</h3>
-              <p>
-                The code separates sections, reusable charts, types, and data
-                adapters so five teammates can own independent visualizations
-                without rewriting the story shell.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="mb-2 font-bold text-white">
-                Sources to document
-              </h3>
-              <p>
-                Final work should cite the CVE List, CVE Program documentation,
-                CVSS source fields, and any exploitation dataset used—plus
-                cleaning decisions in the process book.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {activeFilters.length > 0 && (
         <div className="fixed bottom-4 right-4 z-40 flex items-center gap-4 border border-[#071a2b] bg-[#c7f464] px-4 py-3 text-sm font-bold shadow-[4px_4px_0_#071a2b]">

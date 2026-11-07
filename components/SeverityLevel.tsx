@@ -1,67 +1,37 @@
-// components/SeverityLevel.tsx
-import React from 'react';
-import Image from 'next/image';
-import { CVEResponse } from '../types';
-import './SeverityLevel.css';
+import Image from "next/image";
+import { plural, severityInfo } from "../lib/explorer";
+import type { ExplorerSummary, Severity } from "../lib/types";
 
-const severityImages: Record<string, string> = {
-  CRITICAL: '/images/yellow_jacket_nest.png',
-  HIGH: '/images/beehive.png',
-  MEDIUM: '/images/anthill.png',
-  LOW: '/images/grass.png',
-};
-
-interface SeverityLevelProps {
-  cveData: CVEResponse;
-  onSeverityClick: (severity: string) => void;
-}
-
-export const SeverityLevel: React.FC<SeverityLevelProps> = ({
-  cveData,
-  onSeverityClick,
-}) => {
-  const severities = Object.entries(cveData);
-
-const getTotalCount = (severity: string): number => {
-  const severityData = cveData[severity as keyof CVEResponse];
-  return severityData?.count ?? 0;
-};
-
+// Step 1 of the explorer: one habitat per CVSS severity.
+export function SeverityLevel({ summary, onSelect }: { summary: ExplorerSummary; onSelect: (severity: Severity) => void }) {
+  const total = summary.severities.reduce((sum, s) => sum + s.count, 0);
   return (
-    <div className="flex justify-center items-center min-h-96">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-8 justify-items-center">
-        {severities.map(([severity]) => {
-          const image = severityImages[severity.toUpperCase()];
-          const count = getTotalCount(severity);
-
+    <div>
+      <p className="text-sm text-slate-600">
+        {total.toLocaleString("en-US")} published CVEs have both a CVSS severity and a named vendor. Pick a severity to see its vendors.
+      </p>
+      <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4">
+        {summary.severities.map((s) => {
+          const info = severityInfo[s.key];
           return (
             <button
-              key={severity}
-              className="flex flex-col items-center gap-2 p-4 rounded-lg transition-transform hover:scale-105"
-              aria-label={`${severity} severity, ${count} CVEs`}
-              onClick={() => onSeverityClick(severity)}
+              key={s.key}
+              type="button"
+              onClick={() => onSelect(s.key)}
+              aria-label={`${info.label} severity: ${plural(s.count, "CVE")}, ${s.kev.toLocaleString("en-US")} exploited`}
+              className="explorer-tile flex flex-col items-center p-3 text-center md:p-4"
             >
-              {image && (
-              <div className="relative h-64 w-64">
-                <Image
-                  src={image}
-                  alt=""
-                  fill
-                  sizes="256px"
-                  className="object-contain"
-                />
-              </div>
-              )}
-              <span className="text-lg font-semibold capitalize">
-                {severity.toLowerCase()}
+              <span className="relative block aspect-square w-full max-w-56">
+                <Image src={info.habitatImage} alt="" fill sizes="(min-width: 768px) 224px, 40vw" className="object-contain" />
               </span>
-              <span className="text-sm">{count} CVEs</span>
+              <span className="mt-3 text-lg font-bold">{info.label}</span>
+              <span className="text-xs text-slate-500">{info.habitat}</span>
+              <span className="mt-2 text-sm tabular-nums">{plural(s.count, "CVE")}</span>
+              <span className="text-xs tabular-nums text-[#c0392b]">{s.kev.toLocaleString("en-US")} exploited</span>
             </button>
           );
         })}
       </div>
     </div>
   );
-};
-
-export default SeverityLevel;
+}

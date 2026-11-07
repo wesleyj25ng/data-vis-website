@@ -132,7 +132,15 @@ export function CveSpiderChart({ year: selectedYear, setYear }: { year: number |
           <RadarChart data={data} cx="50%" cy="50%" outerRadius="72%">
             <PolarGrid stroke="rgba(7,26,43,.2)" />
             <PolarAngleAxis dataKey="label" tick={{ fill: "#071a2b", fontSize: 12, fontWeight: 700 }} />
-            <PolarRadiusAxis angle={90} domain={[0, 100]} tick={{ fill: "#49616e", fontSize: 10 }} tickCount={5} />
+            {/* Ticks sit between the top two spokes so they never cover the "CVSS coverage" label. */}
+            <PolarRadiusAxis
+              angle={54}
+              axisLine={false}
+              domain={[0, 100]}
+              tick={{ fill: "#49616e", fontSize: 10 }}
+              tickCount={5}
+              tickFormatter={(value: number) => (value === 0 ? "" : String(value))}
+            />
             <Tooltip content={<ProfileTooltip />} />
             {showOverall && (
               <Radar

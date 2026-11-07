@@ -1,10 +1,15 @@
-# Local data contract
+# Chart data
 
-Caleb's cleaned record-level source dataset is shared separately from this repository. It is intentionally not loaded by the prototype yet: the site uses clearly labeled samples from `lib/sample-data.ts` while visualization work is distributed across the team.
+These files are made from our cleaned dataset (`cve_data.csv`) by the scripts in `../scripts`. See the main README for the commands.
 
-Add derived, analysis-ready aggregates here when a chart owner is ready to connect a real view. Keep the record-level source separate from these smaller chart-ready files.
+| File | Used by | Made by |
+| --- | --- | --- |
+| `cve-annual-trend.json` | Trend chart | `build-annual-trend-data.py` |
+| `cve-profile.json` | Spider chart | `build-cve-profile-data.py` |
+| `vendor-exploitation.json` | Vendor exploitation chart | `build-vendor-exploitation-data.py` |
+| `cwe-severity-heatmap.json` | CWE heatmap | `build-cwe-severity-heatmap-data.py` |
+| `explorer-summary.json` | CVE explorer (counts and vendor lists) | `build-explorer-data.py` |
 
-Suggested annual CSV columns: `year,cves,critical,high`.
-Suggested CWE JSON/CSV columns: `cwe,label,count,group`.
+The explorer's per-vendor files are in `../public/explorer/`, because the page fetches them only when a vendor is clicked.
 
-Keep raw source data out of this folder if it is too large to submit. Document the source URL, retrieval date, cleaning scripts, aggregation rules, and known gaps in the process book.
+`cve-annual-trend-rawgraphs.csv` and `cve-profile-rawgraphs.csv` are small exports we used for our RAWGraphs drafts. The site does not load them.

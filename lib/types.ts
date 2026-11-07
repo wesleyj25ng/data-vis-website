@@ -1,28 +1,47 @@
-export type YearPoint = { year: number; cves: number; critical: number; high: number };
-export type CwePoint = { cwe: string; label: string; count: number; group: string };
-export type Filters = { year: number | null; severity: "all" | "critical" | "high"; cwe: string | null };
+// Shared state for the linked charts: the year picked in the trend chart (or spider chart slider)
+// and the weakness picked in the vendor chart or heatmap.
+export type Filters = { year: number | null; cwe: string | null };
 
+// Explorer (see scripts/build-explorer-data.py)
+export type Severity = "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
 
-export interface CVEData {  'CVE ID': string;  'Assigner Short Name': string;  'CNA ID': string;  Product: string;  Vendor: string;  State: string;  'Date Reserved': string;  'Date Published': string;  'Date Rejected': string;  'CVSS Version': string;  'CVSS Score': string;  'CVSS Severity': string;  'CVE Problem Types': string;  'Is in KEV': string;  'Date Added to KEV': string;}
+// [name, file key, CVE count, CVEs in KEV]
+export type ExplorerVendor = [string, string, number, number];
 
-export interface VendorCVEs {
-  [vendor: string]: CVEData[];
-}
+export type ExplorerSummary = {
+  minCves: number;
+  severities: { key: Severity; count: number; kev: number; vendorCount: number; vendors: ExplorerVendor[] }[];
+  cweNames: Record<string, string>;
+};
 
-export interface SeverityData {
-  count: number;
-  vendors: VendorCVEs;
-}
+// One CVE as stored in public/explorer/<severity>/<vendor>.json
+export type ExplorerCveRow = [
+  id: string,
+  product: string,
+  score: number | null,
+  published: string,
+  reserved: string,
+  cwes: string[],
+  inKev: 0 | 1,
+  dateAddedToKev: string,
+  assigner: string,
+  description: string,
+];
 
-export interface CVEResponse {
-  CRITICAL: SeverityData;
-  HIGH: SeverityData;
-  MEDIUM: SeverityData;
-  LOW: SeverityData;
-}
+export type ExplorerCve = {
+  id: string;
+  product: string;
+  score: number | null;
+  published: string;
+  reserved: string;
+  cwes: string[];
+  inKev: boolean;
+  dateAddedToKev: string;
+  assigner: string;
+  description: string;
+};
 
-export interface Filters {
-  year: number | null;
-  severity: string;
-  cwe: string | null;
+export function toExplorerCve(row: ExplorerCveRow): ExplorerCve {
+  const [id, product, score, published, reserved, cwes, inKev, dateAddedToKev, assigner, description] = row;
+  return { id, product, score, published, reserved, cwes, inKev: inKev === 1, dateAddedToKev, assigner, description };
 }

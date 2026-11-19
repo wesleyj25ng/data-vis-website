@@ -66,17 +66,17 @@ export function CVEYearMap({ cves, vendor, severity, onSelect }: { cves: Explore
       <p className="text-lg font-bold">{vendor[0]}: {plural(cves.length, `${info.label} CVE`)}</p>
       <p className="text-sm text-slate-600">
         {exploited > 0 ? `${exploited.toLocaleString("en-US")} of them exploited (red ring). ` : "None of them are in CISA's KEV catalog. "}
-        Each {info.insect} is one CVE, grouped by the year it was published. Zoom in and click one to open it.
+        Each {info.insect} is one CVE, grouped by the year it was published. <b>Zoom in and click one to open it.</b>
       </p>
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-slate-600">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm text-slate-600">
           <span className="flex items-center gap-1.5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={info.insectImage} alt="" width={22} height={22} /> One CVE
           </span>
           <span className="flex items-center gap-1.5"><i className="inline-block h-4 w-4 rounded-full border-2 border-[#c0392b]" /> Exploited (in KEV)</span>
-          <span>Drag to move. Zoom with the buttons, a pinch, or Ctrl + scroll.</span>
+          <span>Drag to move. <b>Zoom with the buttons, a pinch, or Ctrl + scroll.</b></span>
         </div>
         <TransformWrapper initialScale={1} minScale={0.02} maxScale={4} centerZoomedOut limitToBounds wheel={{ activationKeys: ["Control"] }} doubleClick={{ disabled: true }}>
           {() => (

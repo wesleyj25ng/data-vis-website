@@ -99,7 +99,7 @@ export default function Home() {
             <aside className="border-l-2 border-[#137cbe] pl-5 pt-5">
               <p className="eyebrow text-[#137cbe]">Read the chart</p>
               <p className="mt-3 leading-7">
-                Click a year to select it. The spider chart and the CWE heatmap further down switch to that year, and the selection shows in a
+                <b>Click a year to select it.</b> The spider chart and the CWE heatmap further down switch to that year, and the selection shows in a
                 bar at the bottom of the screen. Click the same year again to clear it.
               </p>
               <p className="mt-6 text-sm text-slate-600">
@@ -229,7 +229,7 @@ export default function Home() {
 
 
       {activeFilters.length > 0 && (
-        <div className="fixed bottom-4 right-4 z-40 flex items-center gap-4 border border-[#071a2b] bg-[#c7f464] px-4 py-3 text-sm font-bold shadow-[4px_4px_0_#071a2b]">
+        <div className="fixed bottom-4 right-4 z-40 flex items-center gap-4 border border-[#071a2b] bg-[#c7f464] px-6 py-5 text-lg font-bold shadow-[4px_4px_0_#071a2b]">
           <span>Linked selection: {activeFilters.join(" · ")}</span>
           <button
             type="button"

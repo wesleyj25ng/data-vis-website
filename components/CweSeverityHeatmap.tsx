@@ -217,7 +217,7 @@ export function CweSeverityHeatmap({ year, clearYear, selectedCwe, setSelectedCw
                 )}
               </>
             ) : (
-              <p className="text-sm text-slate-600">Hover or tap a cell to see that weakness broken down by severity.</p>
+              <p className="text-sm text-slate-600"><b>Hover or tap a cell</b> to see that weakness broken down by severity.</p>
             )}
           </div>
         </aside>

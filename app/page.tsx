@@ -84,8 +84,10 @@ export default function Home() {
         <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-[1.25fr_2fr]">
           <p className="eyebrow text-[#c7f464]">A vocabulary for the story</p>
           <p className="text-xl leading-8 text-slate-200">
-            A <b className="text-white">CVE</b> identifies a publicly known vulnerability. <b className="text-white">CVSS</b> rates how severe it
-            is, from Low to Critical. A <b className="text-white">CWE</b> names the underlying weakness type, like SQL injection.{" "}
+            A <b className="text-white">CVE</b> identifies a publicly known vulnerability.
+            <b className="text-white">CVSS</b> rates how severe it
+            is, from Low to Critical.
+            A <b className="text-white">CWE</b> names the underlying weakness type, like SQL injection.{" "}
             <b className="text-white">KEV</b> is CISA&apos;s list of CVEs known to be exploited in real attacks.
           </p>
         </div>

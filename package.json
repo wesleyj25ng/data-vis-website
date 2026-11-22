@@ -13,7 +13,7 @@
   "description": "",
   "dependencies": {
     "d3": "^7.9.0",
-    "next": "^16.4.3",
+    "next": "^16.4.6",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-zoom-pan-pinch": "^4.2.0",

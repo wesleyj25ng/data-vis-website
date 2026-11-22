@@ -14,6 +14,7 @@ import {
 import annualData from "../data/cve-annual-trend.json";
 import { Filters } from "../lib/types";
 
+import { Term } from "./Glossary";
 type TrendRecord = [number, number, number, number, number];
 
 const severityLabels: Record<string, string> = {
@@ -76,7 +77,8 @@ export function AnnualTrendChart({
           <p className="eyebrow text-[#137cbe]">CVE List · dated records</p>
           <h3 className="display mt-1 text-3xl">CVE records by year</h3>
           <p className="mt-2 max-w-xl text-sm leading-6 text-slate-600">
-            Filter the annual count by CVSS severity, record status, and CNA assigner.
+            Filter the annual count by <Term id="severity">CVSS severity</Term>, <Term id="record-state">record status</Term>, and{" "}
+            <Term id="cna">CNA assigner</Term>.
           </p>
         </div>
         <div className="flex items-center gap-3">

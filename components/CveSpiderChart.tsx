@@ -12,6 +12,7 @@ import {
 } from "recharts";
 import profileData from "../data/cve-profile.json";
 
+import { Term } from "./Glossary";
 const metrics = [
   { key: "cvssCoverage", label: "CVSS coverage", description: "Records with a CVSS score" },
   { key: "highCriticalShare", label: "High / critical", description: "Scored records rated High or Critical" },
@@ -96,7 +97,7 @@ export function CveSpiderChart({ year: selectedYear, setYear }: { year: number |
           <p className="eyebrow text-[#137cbe]">Data-backed profile · published CVEs</p>
           <h3 className="display mt-1 text-3xl">The shape of vulnerability risk</h3>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-            Compare coverage, severity, and vendor diversity for a publication year. The vendor-diversity spoke is indexed to the highest yearly rate; hover to see vendors per 1,000 CVEs.
+            Compare coverage, <Term id="severity">severity</Term>, and <Term id="vendor">vendor</Term> diversity for a publication year. The vendor-diversity spoke is indexed to the highest yearly rate; hover to see vendors per 1,000 CVEs.
           </p>
         </div>
         <label className="min-w-48 text-sm font-bold">
@@ -173,7 +174,7 @@ export function CveSpiderChart({ year: selectedYear, setYear }: { year: number |
         </span>
       </div>
       <p className="mt-3 text-xs leading-5 text-slate-500">
-        CVSS coverage and CWE identification use all included records; high/critical share and mean CVSS use scored records. Vendor diversity is indexed against the highest yearly vendor rate; hover for the actual rate.
+        <Term id="unscored">CVSS coverage</Term> and <Term id="cwe">CWE</Term> identification use all included records; high/critical share and mean CVSS use scored records. Vendor diversity is indexed against the highest yearly vendor rate; hover for the actual rate.
       </p>
     </div>
   );

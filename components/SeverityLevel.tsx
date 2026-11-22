@@ -2,13 +2,14 @@ import Image from "next/image";
 import { plural, severityInfo } from "../lib/explorer";
 import type { ExplorerSummary, Severity } from "../lib/types";
 
+import { Term } from "./Glossary";
 // Step 1 of the explorer: one habitat per CVSS severity.
 export function SeverityLevel({ summary, onSelect }: { summary: ExplorerSummary; onSelect: (severity: Severity) => void }) {
   const total = summary.severities.reduce((sum, s) => sum + s.count, 0);
   return (
     <div>
       <p className="text-sm text-slate-600">
-        {total.toLocaleString("en-US")} published CVEs have both a CVSS severity and a named vendor. Pick a severity to see its vendors.
+        {total.toLocaleString("en-US")} published CVEs have both a <Term id="severity">CVSS severity</Term> and a named <Term id="vendor">vendor</Term>. Pick a severity to see its vendors.
       </p>
       <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4">
         {summary.severities.map((s) => {

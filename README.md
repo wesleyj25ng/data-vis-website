@@ -28,6 +28,7 @@ For a faster version of the site, run `npm run build` and then `npm start` inste
 - **03 Severity**: a heatmap of the 20 most common weakness types (CWEs) by CVSS severity. Shade cells by count or by share, reorder the rows, and hover or tap a cell for its numbers.
 - **04 Explorer**: the CVE Vulnerability Explorer. Pick a severity, then a vendor, to see each of that vendor's CVEs as an insect, grouped by year. Click one to see its details.
 - **05 Notes**: our findings, the limits of the data, and sources.
+- **Glossary**: plain definitions of the terms used on the site (CVE, CNA, CVSS, CWE, KEV and the weakness types). Underlined words anywhere on the page, including in the charts, show a short definition when you hover over them with a mouse (click to keep it open) or tap them on a phone, with a link to the full entry.
 
 The year picked in the trend chart (or with the spider chart's slider) and the weakness picked in the vendor chart or heatmap are shared between charts. The current selection shows in a bar at the bottom right, with a Clear button.
 
@@ -39,6 +40,7 @@ The year picked in the trend chart (or with the spider chart's slider) and the w
 - `public/explorer/` has one file per vendor and severity for the explorer, loaded only when that vendor is clicked
 - `public/images/` has the explorer's drawings
 - `scripts/` has the Python scripts we used to make the data files
+- `components/Glossary.tsx` has the Glossary section and the `Term` popup used for underlined words; the definitions themselves are in `lib/glossary.ts`
 - `lib/` has shared types and helpers
 
 ## Data

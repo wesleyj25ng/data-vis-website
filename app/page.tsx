@@ -5,6 +5,7 @@ import { AnnualTrendChart } from "../components/AnnualTrendChart";
 import { CVEExplorer } from "../components/CVEExplorer";
 import { CveSpiderChart } from "../components/CveSpiderChart";
 import { CweSeverityHeatmap } from "../components/CweSeverityHeatmap";
+import { Glossary, Term } from "../components/Glossary";
 import { SectionHeader } from "../components/SectionHeader";
 import { VendorExploitationChart } from "../components/VendorExploitationChart";
 import type { Filters } from "../lib/types";
@@ -17,6 +18,7 @@ const nav = [
   ["03", "Severity", "severity"],
   ["04", "Explorer", "explorer"],
   ["05", "Notes", "notes"],
+  ["", "Glossary", "glossary"],
 ] as const;
 
 const sources = [
@@ -60,7 +62,7 @@ export default function Home() {
           </h1>
           <div className="mt-12 grid max-w-3xl gap-6 md:grid-cols-2">
             <p className="text-lg leading-7">
-              Every CVE is a public record of a software vulnerability. This story looks at how many are published each year, how severe they
+              Every <Term id="cve">CVE</Term> is a public record of a software vulnerability. This story looks at how many are published each year, how severe they
               are, what kinds of weaknesses cause them, and which ones attackers actually exploit.
             </p>
             <p className="border-l-2 border-[#137cbe] pl-5 text-sm leading-6 text-slate-600">
@@ -75,6 +77,9 @@ export default function Home() {
             <a href="#notes" className="border border-[#071a2b]/30 px-5 py-3 text-sm font-bold hover:bg-white">
               Findings, data &amp; limitations
             </a>
+            <a href="#glossary" className="border border-[#071a2b]/30 px-5 py-3 text-sm font-bold hover:bg-white">
+              Glossary of terms
+            </a>
           </div>
         </div>
         <div className="absolute bottom-0 right-0 hidden h-44 w-44 bg-[#c7f464] md:block" />
@@ -82,13 +87,34 @@ export default function Home() {
 
       <section className="bg-[#071a2b] px-5 py-12 text-white md:px-8">
         <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-[1.25fr_2fr]">
-          <p className="eyebrow text-[#c7f464]">A vocabulary for the story</p>
+          <div>
+            <p className="eyebrow text-[#c7f464]">A vocabulary for the story</p>
+            <p className="mt-3 text-sm leading-6 text-slate-300">
+              New to these terms? Hover over, click or tap any underlined word on the page to see what it means. Every term is also in the{" "}
+              <a href="#glossary" className="font-bold text-[#c7f464] underline underline-offset-2 hover:no-underline">
+                glossary
+              </a>{" "}
+              at the end.
+            </p>
+          </div>
           <p className="text-xl leading-8 text-slate-200">
-            A <b className="text-white">CVE</b> identifies a publicly known vulnerability.
-            <b className="text-white">CVSS</b> rates how severe it
-            is, from Low to Critical.
-            A <b className="text-white">CWE</b> names the underlying weakness type, like SQL injection.{" "}
-            <b className="text-white">KEV</b> is CISA&apos;s list of CVEs known to be exploited in real attacks.
+            A{" "}
+            <Term id="cve" className="font-bold text-white">
+              CVE
+            </Term>{" "}
+            identifies a publicly known vulnerability.{" "}
+            <Term id="cvss" className="font-bold text-white">
+              CVSS
+            </Term>{" "}
+            rates how severe it is, from Low to Critical. A{" "}
+            <Term id="cwe" className="font-bold text-white">
+              CWE
+            </Term>{" "}
+            names the underlying weakness type, like SQL injection.{" "}
+            <Term id="kev" className="font-bold text-white">
+              KEV
+            </Term>{" "}
+            is CISA&apos;s list of CVEs known to be exploited in real attacks.
           </p>
         </div>
       </section>
@@ -121,8 +147,8 @@ export default function Home() {
             <VendorExploitationChart selectedCwe={filters.cwe} setSelectedCwe={(cwe) => setFilters({ ...filters, cwe })} />
           </div>
           <p className="mt-6 max-w-3xl text-sm leading-6 text-slate-600">
-            Both charts summarize our cleaned CVE dataset. Many records have no CVSS score, CWE or vendor, so read them alongside the coverage
-            spokes of the spider chart.
+            Both charts summarize our cleaned CVE dataset. Many records have no <Term id="unscored">CVSS score</Term>, <Term id="cwe">CWE</Term> or{" "}
+            <Term id="vendor">vendor</Term>, so read them alongside the coverage spokes of the spider chart.
           </p>
         </div>
       </section>
@@ -131,8 +157,9 @@ export default function Home() {
         <div className="mx-auto max-w-6xl">
           <SectionHeader index="03" kicker="Severity by weakness" title="The most common weaknesses carry very different severity." />
           <p className="mb-8 max-w-3xl border-l-2 border-[#137cbe] pl-5 leading-7">
-            Weaknesses in how software handles input, like injection, path traversal and missing input validation, make up 41% of CVEs with a
-            known CWE. They make up 51% of the Critical ones.
+            <Term id="input-handling">Weaknesses in how software handles input</Term>, like <Term id="injection">injection</Term>,{" "}
+            <Term id="path-traversal">path traversal</Term> and missing input validation, make up 41% of CVEs with a known{" "}
+            <Term id="cwe">CWE</Term>. They make up 51% of the <Term id="severity">Critical</Term> ones.
           </p>
           <CweSeverityHeatmap
             year={filters.year}
@@ -167,14 +194,20 @@ export default function Home() {
               ],
               [
                 "Input handling matters most.",
-                "Weaknesses in how software handles input are 41% of CVEs with a known CWE, but 51% of the Critical ones and 43% of the exploited ones.",
+                <>
+                  <Term id="input-handling">Weaknesses in how software handles input</Term> are 41% of CVEs with a known CWE, but 51% of the
+                  Critical ones and 43% of the <Term id="exploited">exploited</Term> ones.
+                </>,
               ],
               [
                 "More CVEs doesn't mean more exploitation.",
-                "Only 1,756 of 395,208 published CVEs (about 1 in 225) are in CISA's KEV catalog. Linux has the most CVEs, but Microsoft has the most exploited ones.",
+                <>
+                  Only 1,756 of 395,208 published CVEs (about <Term id="one-in-n">1 in 225</Term>) are in CISA&apos;s{" "}
+                  <Term id="kev">KEV catalog</Term>. Linux has the most CVEs, but Microsoft has the most exploited ones.
+                </>,
               ],
             ].map(([title, text], i) => (
-              <li key={title} className="border-t border-white/20 pt-4">
+              <li key={String(title)} className="border-t border-white/20 pt-4">
                 <span className="eyebrow text-[#c7f464]">Finding {i + 1}</span>
                 <h3 className="mt-2 text-lg font-bold">{title}</h3>
                 <p className="mt-1 text-sm leading-6 text-slate-300">{text}</p>
@@ -187,13 +220,14 @@ export default function Home() {
               <h3 className="mb-2 font-bold text-white">For developers</h3>
               <p>
                 Treat every input that reaches a database query, a shell command, a file path or an interpreter as untrusted, and validate it.
-                When deciding what to patch first, put CVEs in the KEV catalog ahead of a high CVSS score alone.
+                When deciding what to patch first, put CVEs in the <Term id="kev">KEV catalog</Term> ahead of a high{" "}
+                <Term id="cvss">CVSS score</Term> alone.
               </p>
             </div>
             <div>
               <h3 className="mb-2 font-bold text-white">What the data cannot say</h3>
               <p>
-                55% of published CVEs have no CVSS severity, 46% have no CWE and 43% list no vendor, mostly older records. KEV only lists
+                55% of published CVEs have <Term id="unscored">no CVSS severity</Term>, 46% have no CWE and 43% list no vendor, mostly older records. KEV only lists
                 exploitation CISA has confirmed, so it undercounts. A CVE with two CWEs counts under both, and 2026 is a partial year.
               </p>
             </div>
@@ -229,6 +263,11 @@ export default function Home() {
         </div>
       </section>
 
+      <section id="glossary" className="scroll-mt-14 px-5 py-16 md:px-8 md:py-24">
+        <div className="mx-auto max-w-6xl">
+          <Glossary />
+        </div>
+      </section>
 
       {activeFilters.length > 0 && (
         <div className="fixed bottom-4 right-4 z-40 flex items-center gap-4 border border-[#071a2b] bg-[#c7f464] px-6 py-5 text-lg font-bold shadow-[4px_4px_0_#071a2b]">

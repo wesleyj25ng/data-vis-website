@@ -10,6 +10,7 @@ import { SeverityLevel } from "./SeverityLevel";
 import { VendorSelector } from "./VendorSelector";
 import "./CVEExplorer.css";
 
+import { Term } from "./Glossary";
 // Caleb's innovative view. Four steps: severity -> vendor -> that vendor's CVEs by year -> one CVE.
 // The summary (counts and vendor lists) ships with the page; each vendor's CVEs are a small JSON file in
 // public/explorer that is fetched only when the vendor is clicked.
@@ -87,7 +88,8 @@ export function CVEExplorer() {
           <p className="mt-2 text-sm leading-6 text-slate-600">
             Each severity level is a habitat: a yellow jacket nest for Critical, a beehive for High, an anthill for Medium and grass for Low.
             Pick a level, then a vendor, to see every one of that vendor&apos;s CVEs as a single insect, grouped by the year it was published.
-            Insects with a red ring are CVEs that have been exploited (they are in CISA&apos;s KEV catalog).
+            Insects with a red ring are CVEs that have been <Term id="exploited">exploited</Term> (they are in CISA&apos;s{" "}
+            <Term id="kev">KEV catalog</Term>).
           </p>
         </div>
         {level > 0 && (

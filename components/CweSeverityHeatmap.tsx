@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { interpolateRgb } from "d3";
 import heatmapData from "../data/cwe-severity-heatmap.json";
 
+import { Term } from "./Glossary";
 // Caleb's CWE heatmap: the 20 most common CWEs by CVSS severity, shaded by number of CVE records.
 // The Tableau version has CWEs as columns; here they are rows so every label reads horizontally.
 
@@ -79,7 +80,7 @@ export function CweSeverityHeatmap({ year, clearYear, selectedCwe, setSelectedCw
         <div>
           <p className="eyebrow text-[#137cbe]">CVE List · CVEs with a CWE and a CVSS severity</p>
           <h3 className="display mt-1 text-3xl">CWE heatmap: weakness type by severity</h3>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">The 20 weakness types (CWEs) with the most CVE records, split by CVSS severity.</p>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">The 20 weakness types (<Term id="cwe">CWEs</Term>) with the most CVE records, split by <Term id="severity">CVSS severity</Term>.</p>
         </div>
         <div className="space-y-1 border border-[#071a2b]/20 bg-white/80 px-3 py-2 text-xs" aria-live="polite">
           <span className="terminal-label block text-[9px] text-[#137cbe]">Linked to other charts</span>
@@ -188,11 +189,11 @@ export function CweSeverityHeatmap({ year, clearYear, selectedCwe, setSelectedCw
           ) : (
             <>
               <p className="mt-3 text-sm leading-6">
-                Cross-site scripting (CWE-79) is by far the most common weakness, but most of those CVEs are rated Medium.
+                <Term id="xss">Cross-site scripting</Term> (CWE-79) is by far the most common weakness, but most of those CVEs are rated Medium.
               </p>
               <p className="mt-3 text-sm leading-6">
-                The top three for Critical CVEs are all injection bugs: SQL injection (CWE-89), OS command injection (CWE-78) and code
-                injection (CWE-94). Switch to <b>share</b> shading to compare rows of different sizes.
+                The top three for Critical CVEs are all <Term id="injection">injection</Term> bugs: SQL injection (CWE-89), OS command injection (CWE-78) and code
+                injection (CWE-94). Switch to <Term id="share-shading"><b>share</b> shading</Term> to compare rows of different sizes.
               </p>
             </>
           )}

@@ -5,6 +5,7 @@ import { TransformComponent, TransformWrapper, useControls } from "react-zoom-pa
 import { formatDate, plural, severityInfo } from "../lib/explorer";
 import type { ExplorerCve, ExplorerVendor, Severity } from "../lib/types";
 
+import { Term } from "./Glossary";
 // Step 3 of the explorer: one insect per CVE, grouped by publication year (newest on the left).
 // The map opens zoomed out so every year fits, which doubles as an overview of the vendor's CVEs per year.
 // It can be dragged, and zoomed with the buttons, a pinch, or Ctrl + scroll.
@@ -75,7 +76,7 @@ export function CVEYearMap({ cves, vendor, severity, onSelect }: { cves: Explore
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={info.insectImage} alt="" width={22} height={22} /> One CVE
           </span>
-          <span className="flex items-center gap-1.5"><i className="inline-block h-4 w-4 rounded-full border-2 border-[#c0392b]" /> Exploited (in KEV)</span>
+          <span className="flex items-center gap-1.5"><i className="inline-block h-4 w-4 rounded-full border-2 border-[#c0392b]" /> Exploited (in <Term id="kev">KEV</Term>)</span>
           <span>Drag to move. <b>Zoom with the buttons, a pinch, or Ctrl + scroll.</b></span>
         </div>
         <TransformWrapper initialScale={1} minScale={0.02} maxScale={4} centerZoomedOut limitToBounds wheel={{ activationKeys: ["Control"] }} doubleClick={{ disabled: true }}>

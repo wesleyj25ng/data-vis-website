@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { formatDate, severityInfo } from "../lib/explorer";
 import type { ExplorerCve, Severity } from "../lib/types";
 
+import { Term } from "./Glossary";
 // Step 4 of the explorer: everything our dataset has about one CVE, plus a link to the full record.
 export function CVEDetails({ cve, vendor, severity, cweNames }: { cve: ExplorerCve; vendor: string; severity: Severity; cweNames: Record<string, string> }) {
   const info = severityInfo[severity];
@@ -34,14 +35,14 @@ export function CVEDetails({ cve, vendor, severity, cweNames }: { cve: ExplorerC
         </span>
         <span className="mt-2 text-sm font-bold">{info.label} severity</span>
         <span className="display text-4xl tabular-nums">{cve.score ?? "-"}</span>
-        <span className="text-xs text-slate-500">CVSS score</span>
+        <span className="text-xs text-slate-500"><Term id="cvss">CVSS score</Term></span>
       </div>
 
       <div className="min-w-0">
         <h4 className="display text-3xl break-words">{cve.id}</h4>
         {cve.inKev ? (
           <p className="mt-3 border-l-4 border-[#c0392b] bg-[#c0392b]/10 px-3 py-2 text-sm">
-            <b>Exploited in the wild.</b> CISA added this CVE to its Known Exploited Vulnerabilities catalog on {formatDate(cve.dateAddedToKev)}.
+            <b>Exploited in the wild.</b> CISA added this CVE to its <Term id="kev">Known Exploited Vulnerabilities catalog</Term> on {formatDate(cve.dateAddedToKev)}.
           </p>
         ) : (
           <p className="mt-3 text-sm text-slate-600">Not in CISA&apos;s Known Exploited Vulnerabilities catalog.</p>

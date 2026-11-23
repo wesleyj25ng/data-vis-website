@@ -44,21 +44,26 @@ export function AnnualTrendChart({
     return annualData.assigners.filter((name) => name.toLocaleLowerCase().includes(query));
   }, [assignerSearch]);
 
-  const chartData = useMemo(() => {
-    const totals = new Map<number, number>();
-    for (const [yearIndex, statusIndex, severityIndex, assignerIndex, count] of annualData.records as TrendRecord[]) {
-      const rowStatus = annualData.statuses[statusIndex];
-      const rowSeverity = annualData.severities[severityIndex];
-      const rowAssigner = annualData.assigners[assignerIndex];
-      if (status !== "all" && rowStatus !== status) continue;
-      if (severity !== "all" && rowSeverity !== severity) continue;
-      if (assigner !== "all" && rowAssigner !== assigner) continue;
+const chartData = useMemo(() => {
+  const totals = new Map<number, number>();
+  const query = assignerSearch.trim().toLocaleLowerCase();
 
-      const year = annualData.years[yearIndex];
-      totals.set(year, (totals.get(year) ?? 0) + count);
-    }
-    return annualData.years.map((year) => ({ year, cves: totals.get(year) ?? 0 }));
-  }, [assigner, severity, status]);
+  for (const [yearIndex, statusIndex, severityIndex, assignerIndex, count] of annualData.records as TrendRecord[]) {
+    const rowStatus = annualData.statuses[statusIndex];
+    const rowSeverity = annualData.severities[severityIndex];
+    const rowAssigner = annualData.assigners[assignerIndex];
+
+    if (status !== "all" && rowStatus !== status) continue;
+    if (severity !== "all" && rowSeverity !== severity) continue;
+    if (assigner !== "all" && rowAssigner !== assigner) continue;
+    if (query && !rowAssigner.toLocaleLowerCase().includes(query)) continue;
+
+    const year = annualData.years[yearIndex];
+    totals.set(year, (totals.get(year) ?? 0) + count);
+  }
+
+  return annualData.years.map((year) => ({ year, cves: totals.get(year) ?? 0 }));
+}, [assigner, assignerSearch, severity, status]);
 
   const totalMatching = chartData.reduce((total, point) => total + point.cves, 0);
 
